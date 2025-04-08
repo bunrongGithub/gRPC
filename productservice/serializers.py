@@ -1,12 +1,18 @@
 from django_grpc_framework import proto_serializers
-from authservice.models import Product
+from productservice.models import Product
+import os 
+import sys
 
-from product_grpc import product_pb2 as pb2
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE","microservices.settings")
+import django
+django.setup()
+import productservice.product_grpc.product_pb2 as product__pb2_grpc
 
 class ProductProtoSerializer(proto_serializers.ModelProtoSerializer):
     class Meta:
         model=Product
-        proto_class=pb2.Product
+        proto_class=product__pb2_grpc.Product
         fields="__all__"
 
     

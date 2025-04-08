@@ -1,12 +1,23 @@
-from productservice.product_grpc import product_pb2_grpc
-# Import Product Model
+# productservice/grpc_services.py
+from django_grpc_framework.services import Service
+import grpc
 from productservice.models import Product
-class ProductService(product_pb2_grpc.ProductServiceServicer):
-    def GetProduct(self, request, context):
+from productservice.serializers import ProductProtoSerializer
+
+class ProductService(Service):
+    def get_object(self, pk):
         try:
-            product = Product.objects.get(id=request.id)
-            return product
-        except Product.DoesNotExist as e:
-            print("Product not found!!")
+            return Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            self.context.abort(grpc.StatusCode.NOT_FOUND, "Product:%s not found!" % pk)
+
+    def GetProduct(self, request, context):
+        product = self.get_object(request.id)
+        serializer = ProductProtoSerializer(product)
+        return serializer.message
+
     def ListProducts(self, request, context):
-        return Product.objects.all().order_by("name")
+        products = Product.objects.all()
+        serializer = ProductProtoSerializer(products, many=True)
+        for msg in serializer.message:
+            yield msg
