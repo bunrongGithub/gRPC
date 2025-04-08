@@ -3,6 +3,7 @@
 import grpc
 import warnings
 
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 import productservice.product_grpc.product_pb2 as product__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
@@ -41,10 +42,10 @@ class ProductServiceStub(object):
                 _registered_method=True)
         self.ListProducts = channel.unary_unary(
                 '/productservice.ProductService/ListProducts',
-                request_serializer=product__pb2.ProductRequest.SerializeToString,
+                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=product__pb2.ProductList.FromString,
                 _registered_method=True)
-        self.CreateProduct = channel.unary_unary(
+        self.CreateProduct = channel.unary_stream(
                 '/productservice.ProductService/CreateProduct',
                 request_serializer=product__pb2.ProductRequestCreate.SerializeToString,
                 response_deserializer=product__pb2.Product.FromString,
@@ -82,10 +83,10 @@ def add_ProductServiceServicer_to_server(servicer, server):
             ),
             'ListProducts': grpc.unary_unary_rpc_method_handler(
                     servicer.ListProducts,
-                    request_deserializer=product__pb2.ProductRequest.FromString,
+                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                     response_serializer=product__pb2.ProductList.SerializeToString,
             ),
-            'CreateProduct': grpc.unary_unary_rpc_method_handler(
+            'CreateProduct': grpc.unary_stream_rpc_method_handler(
                     servicer.CreateProduct,
                     request_deserializer=product__pb2.ProductRequestCreate.FromString,
                     response_serializer=product__pb2.Product.SerializeToString,
@@ -143,7 +144,7 @@ class ProductService(object):
             request,
             target,
             '/productservice.ProductService/ListProducts',
-            product__pb2.ProductRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             product__pb2.ProductList.FromString,
             options,
             channel_credentials,
@@ -166,7 +167,7 @@ class ProductService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(
+        return grpc.experimental.unary_stream(
             request,
             target,
             '/productservice.ProductService/CreateProduct',

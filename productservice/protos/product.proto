@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package productservice;
+import "google/protobuf/empty.proto"; 
 message Product {
     int32 id = 1;
     string name = 2;
@@ -16,8 +17,9 @@ message ProductRequestCreate{
 message ProductList {
     repeated Product products = 1;
 }
+message ProductListRequest{};
 service ProductService {
     rpc GetProduct (ProductRequest) returns (Product);
-    rpc ListProducts (ProductRequest) returns (ProductList);
-    rpc CreateProduct(ProductRequestCreate) returns (Product)
+    rpc ListProducts (google.protobuf.Empty) returns (ProductList);
+    rpc CreateProduct(ProductRequestCreate) returns (stream Product);
 }

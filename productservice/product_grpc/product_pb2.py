@@ -22,23 +22,26 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rproduct.proto\x12\x0eproductservice\"2\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05price\x18\x03 \x01(\x01\"\x1c\n\x0eProductRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"3\n\x14ProductRequestCreate\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05price\x18\x02 \x01(\x01\"8\n\x0bProductList\x12)\n\x08products\x18\x01 \x03(\x0b\x32\x17.productservice.Product2\xf4\x01\n\x0eProductService\x12\x45\n\nGetProduct\x12\x1e.productservice.ProductRequest\x1a\x17.productservice.Product\x12K\n\x0cListProducts\x12\x1e.productservice.ProductRequest\x1a\x1b.productservice.ProductList\x12N\n\rCreateProduct\x12$.productservice.ProductRequestCreate\x1a\x17.productservice.Productb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rproduct.proto\x12\x0eproductservice\x1a\x1bgoogle/protobuf/empty.proto\"2\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05price\x18\x03 \x01(\x01\"\x1c\n\x0eProductRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"3\n\x14ProductRequestCreate\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05price\x18\x02 \x01(\x01\"8\n\x0bProductList\x12)\n\x08products\x18\x01 \x03(\x0b\x32\x17.productservice.Product\"\x14\n\x12ProductListRequest2\xee\x01\n\x0eProductService\x12\x45\n\nGetProduct\x12\x1e.productservice.ProductRequest\x1a\x17.productservice.Product\x12\x43\n\x0cListProducts\x12\x16.google.protobuf.Empty\x1a\x1b.productservice.ProductList\x12P\n\rCreateProduct\x12$.productservice.ProductRequestCreate\x1a\x17.productservice.Product0\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'product_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_PRODUCT']._serialized_start=33
-  _globals['_PRODUCT']._serialized_end=83
-  _globals['_PRODUCTREQUEST']._serialized_start=85
-  _globals['_PRODUCTREQUEST']._serialized_end=113
-  _globals['_PRODUCTREQUESTCREATE']._serialized_start=115
-  _globals['_PRODUCTREQUESTCREATE']._serialized_end=166
-  _globals['_PRODUCTLIST']._serialized_start=168
-  _globals['_PRODUCTLIST']._serialized_end=224
-  _globals['_PRODUCTSERVICE']._serialized_start=227
-  _globals['_PRODUCTSERVICE']._serialized_end=471
+  _globals['_PRODUCT']._serialized_start=62
+  _globals['_PRODUCT']._serialized_end=112
+  _globals['_PRODUCTREQUEST']._serialized_start=114
+  _globals['_PRODUCTREQUEST']._serialized_end=142
+  _globals['_PRODUCTREQUESTCREATE']._serialized_start=144
+  _globals['_PRODUCTREQUESTCREATE']._serialized_end=195
+  _globals['_PRODUCTLIST']._serialized_start=197
+  _globals['_PRODUCTLIST']._serialized_end=253
+  _globals['_PRODUCTLISTREQUEST']._serialized_start=255
+  _globals['_PRODUCTLISTREQUEST']._serialized_end=275
+  _globals['_PRODUCTSERVICE']._serialized_start=278
+  _globals['_PRODUCTSERVICE']._serialized_end=516
 # @@protoc_insertion_point(module_scope)

@@ -12,7 +12,7 @@ class ProductAppService:
         except Exception as e:
             return {"error": str(e)}  # For any other unexpected errors
         serializer = ProductProtoSerializer(product)
-        return serializer.message
+        return serializer.data
 
     def create(self, payload):
         try:
@@ -28,4 +28,4 @@ class ProductAppService:
         except Exception as e:
             return {"error": str(e)}  # Capture any exception during listing
         serializer = ProductProtoSerializer(products, many=True)
-        return serializer.message
+        return serializer.data

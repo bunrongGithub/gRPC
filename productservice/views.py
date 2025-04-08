@@ -7,25 +7,19 @@ from productservice.internal.app_service import ProductAppService
 
 
 class ProductInfoView(APIView):
-
+    def __init__(self, **kwargs):
+        self.service = ProductAppService()
+        super().__init__(**kwargs)
     def get(self, request, **kwargs):
-        service = ProductAppService()
         product_id = kwargs.get("pk")
         # print(product_id)
         try:
-            grpc_response = service.retrieve(id=product_id)
+            grpc_response = self.service.retrieve(id=product_id)
             if grpc_response is None:
                 return Response(
                     {"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND
                 )
-
-            return Response(
-                {
-                    "id": grpc_response.id,
-                    "name": grpc_response.name,
-                    "price": grpc_response.price,
-                }
-            )
+            return Response(grpc_response)
 
         except grpc.RpcError as e:
             if e.code() == grpc.StatusCode.NOT_FOUND:
@@ -39,14 +33,13 @@ class ProductInfoView(APIView):
 
 class ProductListView(APIView):
     def __init__(self, **kwargs):
-
+        self.service = ProductAppService()
         super().__init__(**kwargs)
 
     def post(self, request):
         data = request.data
-        service = ProductAppService()
         try:
-            grpc_response = service.create(payload=data)
+            grpc_response = self.service.create(payload=data)
             return Response(
                 {
                     "id": grpc_response.id,
@@ -59,10 +52,9 @@ class ProductListView(APIView):
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
     def get(self, request, **kwargs):
-        service = ProductAppService()
-        grpc_response = service.list()
+        # service = ProductAppService()
+        grpc_response = self.service.list()
 
         # Make sure grpc_response is a list or iterable and serialize it
         if isinstance(grpc_response, list):
