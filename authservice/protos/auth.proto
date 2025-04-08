@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package authservice;
+
+service AuthService {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc GetUser (UserRequest) returns (User);  // Added this new method
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterResponse {
+  string message = 1;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+message UserRequest {
+  int32 id = 1;
+}
+
+message User {
+  int32 id = 1;
+  string username = 2;
+  string email = 3;
+  repeated int32 groups = 4;
+}
