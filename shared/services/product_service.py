@@ -1,11 +1,4 @@
 import grpc
-import os
-# import django
-
-# # Setup Django environment
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "microservices.settings")
-# django.setup()
-
 import productservice.product_grpc.product_pb2 as pb2
 import productservice.product_grpc.product_pb2_grpc as pb2_grpc
 from productservice.models import Product
