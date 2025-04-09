@@ -1,0 +1,1 @@
+python -m grpc_tools.protoc -I./productservice/protos --python_out=./productservice/product_grpc --grpc_python_out=./productservice/product_grpc productservice/protos/product.proto

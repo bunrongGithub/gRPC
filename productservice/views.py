@@ -55,14 +55,14 @@ class ProductListView(APIView):
     def get(self, request, **kwargs):
         # service = ProductAppService()
         grpc_response = self.service.list()
+        print(grpc_response)
+        # # Make sure grpc_response is a list or iterable and serialize it
+        # if isinstance(grpc_response, list):
+        #     serialized_data = [
+        #         {"id": item.id, "name": item.name, "price": item.price}
+        #         for item in grpc_response
+        #     ]
+        # else:
+        #     serialized_data = []
 
-        # Make sure grpc_response is a list or iterable and serialize it
-        if isinstance(grpc_response, list):
-            serialized_data = [
-                {"id": item.id, "name": item.name, "price": item.price}
-                for item in grpc_response
-            ]
-        else:
-            serialized_data = []
-
-        return Response({"data": serialized_data}, status=status.HTTP_200_OK)
+        return Response({"data": grpc_response}, status=status.HTTP_200_OK)

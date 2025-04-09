@@ -1,15 +1,10 @@
-from django_grpc_framework import generics
 from rest_framework import viewsets
-from orderservice.models import Order
-from productservice.models import Product
-from .serailizers import OrderProtoSerializer
-from django.contrib.auth.models import User
-# Create your views here.
-class OrderService(generics.ModelService):
+from .models import Order
+from .serailizers import OrderSerializer
+class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
-    serializer_class = OrderProtoSerializer
-    def Create(self, request, context):
+    serializer_class=OrderSerializer
 
-        return super().Create(request, context)
-    def Update(self, request, context):
-        return super().Update(request, context)
+    def perform_create(self, serializer):
+        serializer.save(self.request.user)
+        return super().perform_create(serializer)

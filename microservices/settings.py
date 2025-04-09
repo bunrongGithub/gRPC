@@ -17,8 +17,8 @@ ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 
 # EXTERNAL_EPP_SERVICE_URL = "epp-service:50051"
-PRODUCT_SERVICE_URL = "product-service:50052"
-ORDER_SERVICE_URL = "order-service:50053"
+PRODUCT_SERVICE_URL = "[::]:50052"
+ORDER_SERVICE_URL = "[::]:50053"
 
 # Application definition
 
