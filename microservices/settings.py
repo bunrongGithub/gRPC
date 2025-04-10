@@ -13,7 +13,7 @@ SECRET_KEY = "django-insecure-i)cvg08l!0#y((k+o+^%(d)+4!_+bd)d@woudqqvegvxm7@w!1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # EXTERNAL_EPP_SERVICE_URL = "epp-service:50051"
@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "productservice",
     "grpc_framework",
     "paymentservice",
-    'build',
+    "build",
 ]
 
 MIDDLEWARE = [
@@ -65,8 +65,8 @@ TEMPLATES = [
 ]
 GRPC_FRAMEWORK = {
     "ROOT_HANDLERS_HOOK": "urls.grpc_handler",
-    "GRPC_BIND_ADDRESS":"localhost:50052",
-    "GRPC_MAX_WORKERS":10,
+    "GRPC_BIND_ADDRESS": "localhost:50052",
+    "GRPC_MAX_WORKERS": 10,
 }
 WSGI_APPLICATION = "microservices.wsgi.application"
 
