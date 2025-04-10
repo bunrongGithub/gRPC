@@ -11,7 +11,6 @@ class GRPCClient:
     def __enter__(self):
         service_url = os.getenv(f"{self.service_name.upper()}_SERVICE_URL")
 
-        print("server url::: ",service_url)
         if not service_url:
             raise ValueError(f"No URL found for service: {self.service_name.upper()}_SERVICE_URL")
         
