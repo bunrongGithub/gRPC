@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     "orderservice",
     "productservice",
     "grpc_framework",
-    "paymentservice"
+    "paymentservice",
+    'build',
 ]
 
 MIDDLEWARE = [
