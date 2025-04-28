@@ -32,9 +32,9 @@ INSTALLED_APPS = [
     "authservice",
     "orderservice",
     "productservice",
-    "grpc_framework",
     "paymentservice",
     "build",
+    "core_sdk"
 ]
 
 MIDDLEWARE = [
