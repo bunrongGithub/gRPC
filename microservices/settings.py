@@ -33,8 +33,7 @@ INSTALLED_APPS = [
     "orderservice",
     "productservice",
     "paymentservice",
-    "build",
-    "core_sdk"
+    "build"
 ]
 
 MIDDLEWARE = [

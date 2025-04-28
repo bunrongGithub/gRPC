@@ -4,7 +4,6 @@ from client.grpc_product_client import ProductGRPCClient
 
 
 class OrderGRPCClient:
-
     def retrieve(self, order_id):
         with GRPCClient("order") as channel:
             stub = order_pb2_grpc.OrderServiceStub(channel)
