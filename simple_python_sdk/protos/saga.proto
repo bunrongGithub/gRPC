@@ -1,16 +1,10 @@
 syntax="proto3";
-
-package saga.v1;
-
-service SagaService {
-    rpc StartSaga (StartSagaRequest) returns (StartSagaResponse);
-    rpc GetSagaStatus (GetSagaStatusRequest) returns (GetSagaStatusResponse);
-}
-
+import "google/protobuf/timestamp.proto";
 message StartSagaRequest{
     string saga_transaction_id = 1;
     repeated SagaStep steps = 2;
     bytes payload = 3;
+    map<string, string> metadata = 4;
 }
 
 message SagaStep{
@@ -31,4 +25,19 @@ enum SagaStatus{
   COMPENSATING = 3;
   COMPENSATED = 4;
   FAILED = 5;
+}
+message GetSagaStatusRequest {
+    string saga_transaction_id = 1;
+  }
+message GetSagaStatusResponse {
+    string saga_transaction_id = 1;
+    SagaStatus status = 2;
+    int32 current_step = 3;
+    string error_message = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
+}
+service SagaService {
+    rpc StartSagaTransaction (StartSagaRequest) returns (StartSagaResponse);
+    rpc GetSagaStatusTransaction (GetSagaStatusRequest) returns (GetSagaStatusResponse);
 }
