@@ -25,7 +25,7 @@ if _version_not_supported:
     )
 
 
-class SagaServiceStub(object):
+class SagaOrchestratorServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,59 +34,59 @@ class SagaServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.StartSagaTransaction = channel.unary_unary(
-                '/SagaService/StartSagaTransaction',
+        self.StartSaga = channel.unary_unary(
+                '/saga.v1.SagaOrchestratorService/StartSaga',
                 request_serializer=saga__pb2.StartSagaRequest.SerializeToString,
                 response_deserializer=saga__pb2.StartSagaResponse.FromString,
                 _registered_method=True)
-        self.GetSagaStatusTransaction = channel.unary_unary(
-                '/SagaService/GetSagaStatusTransaction',
+        self.GetSagaStatus = channel.unary_unary(
+                '/saga.v1.SagaOrchestratorService/GetSagaStatus',
                 request_serializer=saga__pb2.GetSagaStatusRequest.SerializeToString,
                 response_deserializer=saga__pb2.GetSagaStatusResponse.FromString,
                 _registered_method=True)
 
 
-class SagaServiceServicer(object):
+class SagaOrchestratorServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def StartSagaTransaction(self, request, context):
+    def StartSaga(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetSagaStatusTransaction(self, request, context):
+    def GetSagaStatus(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_SagaServiceServicer_to_server(servicer, server):
+def add_SagaOrchestratorServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'StartSagaTransaction': grpc.unary_unary_rpc_method_handler(
-                    servicer.StartSagaTransaction,
+            'StartSaga': grpc.unary_unary_rpc_method_handler(
+                    servicer.StartSaga,
                     request_deserializer=saga__pb2.StartSagaRequest.FromString,
                     response_serializer=saga__pb2.StartSagaResponse.SerializeToString,
             ),
-            'GetSagaStatusTransaction': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetSagaStatusTransaction,
+            'GetSagaStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetSagaStatus,
                     request_deserializer=saga__pb2.GetSagaStatusRequest.FromString,
                     response_serializer=saga__pb2.GetSagaStatusResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'SagaService', rpc_method_handlers)
+            'saga.v1.SagaOrchestratorService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('SagaService', rpc_method_handlers)
+    server.add_registered_method_handlers('saga.v1.SagaOrchestratorService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class SagaService(object):
+class SagaOrchestratorService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def StartSagaTransaction(request,
+    def StartSaga(request,
             target,
             options=(),
             channel_credentials=None,
@@ -99,7 +99,7 @@ class SagaService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/SagaService/StartSagaTransaction',
+            '/saga.v1.SagaOrchestratorService/StartSaga',
             saga__pb2.StartSagaRequest.SerializeToString,
             saga__pb2.StartSagaResponse.FromString,
             options,
@@ -113,7 +113,7 @@ class SagaService(object):
             _registered_method=True)
 
     @staticmethod
-    def GetSagaStatusTransaction(request,
+    def GetSagaStatus(request,
             target,
             options=(),
             channel_credentials=None,
@@ -126,9 +126,124 @@ class SagaService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/SagaService/GetSagaStatusTransaction',
+            '/saga.v1.SagaOrchestratorService/GetSagaStatus',
             saga__pb2.GetSagaStatusRequest.SerializeToString,
             saga__pb2.GetSagaStatusResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
+class SagaParticipantStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Execute = channel.unary_unary(
+                '/saga.v1.SagaParticipant/Execute',
+                request_serializer=saga__pb2.SagaParticipantRequest.SerializeToString,
+                response_deserializer=saga__pb2.SagaParticipantResponse.FromString,
+                _registered_method=True)
+        self.Compensate = channel.unary_unary(
+                '/saga.v1.SagaParticipant/Compensate',
+                request_serializer=saga__pb2.SagaParticipantRequest.SerializeToString,
+                response_deserializer=saga__pb2.SagaParticipantResponse.FromString,
+                _registered_method=True)
+
+
+class SagaParticipantServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def Execute(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Compensate(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_SagaParticipantServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Execute': grpc.unary_unary_rpc_method_handler(
+                    servicer.Execute,
+                    request_deserializer=saga__pb2.SagaParticipantRequest.FromString,
+                    response_serializer=saga__pb2.SagaParticipantResponse.SerializeToString,
+            ),
+            'Compensate': grpc.unary_unary_rpc_method_handler(
+                    servicer.Compensate,
+                    request_deserializer=saga__pb2.SagaParticipantRequest.FromString,
+                    response_serializer=saga__pb2.SagaParticipantResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'saga.v1.SagaParticipant', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('saga.v1.SagaParticipant', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class SagaParticipant(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def Execute(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/saga.v1.SagaParticipant/Execute',
+            saga__pb2.SagaParticipantRequest.SerializeToString,
+            saga__pb2.SagaParticipantResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Compensate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/saga.v1.SagaParticipant/Compensate',
+            saga__pb2.SagaParticipantRequest.SerializeToString,
+            saga__pb2.SagaParticipantResponse.FromString,
             options,
             channel_credentials,
             insecure,
