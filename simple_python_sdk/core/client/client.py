@@ -6,16 +6,15 @@ import saga_pb2_grpc
 from google.protobuf.json_format import MessageToDict
 
 from core.connection.grpc_connection import GrpcConnection
+from utils.pretty import prettify_saga_response
 
 
 class GrpcOrchestratorClient:
     def __init__(self, orchestrator_host='localhost', orchestrator_port=50051):
         self.orchestrator_address = f"{orchestrator_host}:{orchestrator_port}"
-        print(self.orchestrator_address)
     def start_transaction(self, transaction_id: str, steps: list, payload: dict={}) -> dict:
         """Start a new grpc transaction with explicit service ports"""
         try:
-            # Convert steps to use explicit ports
             saga_steps = []
             for step in steps:
                 print(step['port'])
@@ -26,17 +25,15 @@ class GrpcOrchestratorClient:
                     timeout_seconds=step.get('timeout_seconds', 5)
                 ))
             with GrpcConnection(self.orchestrator_address) as connect:
-                print("connect to base transaction on port - ",self.orchestrator_address)
                 stub = connect.get_stub("SagaOrchestratorService",saga_pb2_grpc.SagaOrchestratorServiceStub)
                 response = stub.StartSaga(saga_pb2.StartSagaRequest(
                     saga_id=transaction_id,
                     steps=saga_steps,
                     payload=str(payload).encode()
                 ))
-                print("3 - ",response)
                 return MessageToDict(response)
         except grpc.RpcError as e:
-            print(f"Error starting saga: {e.code()}: {e.details()}")
+            print(f"Error starting transaction: {e.code()}: {e.details()}")
             return None
 
     def get_transaction_status(self, transaction_id: str) -> dict:
@@ -57,23 +54,24 @@ class GrpcOrchestratorClient:
                                 step['resultPayload'] = json.loads(raw.decode('utf-8'))
                             except Exception as e:
                                 raise e
-                return response_dict
+                return prettify_saga_response(response=response_dict)
         except grpc.RpcError as e:
             print(f"Error getting status: {e.code()}: {e.details()}")
             return None
 if __name__ == '__main__':
     client = GrpcOrchestratorClient()
     steps = [
-        # {
-        #     'port': 50052,
-        #     'rpc_method': 'ReserveInventory',
-        #     'compensation_method': 'ReleaseInventory',
-        #     'timeout_seconds': 5
-        # },
+       
         {
             'port': 50053,
             'rpc_method': 'RefundPayment',
             'compensation_method': 'RefundPayment',
+            'timeout_seconds': 5
+        },
+         {
+            'port': 50052,
+            'rpc_method': 'ReserveInventory',
+            'compensation_method': 'ReleaseInventory',
             'timeout_seconds': 5
         }
     ]

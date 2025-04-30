@@ -12,7 +12,7 @@ from core.storage.memory import InMemoryStorage
 from .storage.base import SagaStorage
 from .models import SagaInstance
 
-class SagaOrchestrator(saga_pb2_grpc.SagaOrchestratorServiceServicer):
+class GrpcOrchestratorTransaction(saga_pb2_grpc.SagaOrchestratorServiceServicer):
     def __init__(self, storage: SagaStorage):
         self.storage = storage
         self.channel_pool: Dict[str, grpc.Channel] = {}
@@ -216,7 +216,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     storage = InMemoryStorage()
     saga_pb2_grpc.add_SagaOrchestratorServiceServicer_to_server(
-        SagaOrchestrator(storage), server)
+        GrpcOrchestratorTransaction(storage), server)
     server.add_insecure_port('[::]:50051')
     server.start()
     print("Grpc Transaction Start at: [::]:50051")

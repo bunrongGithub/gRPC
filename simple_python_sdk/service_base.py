@@ -2,7 +2,7 @@ from concurrent import futures
 
 import grpc
 import saga_pb2_grpc
-from simple_python_sdk import saga_pb2
+import saga_pb2
 class GrpcSagaTransactionParticipantBase(saga_pb2_grpc.SagaParticipantServicer):
     def Execute(self, request, context)-> saga_pb2.SagaParticipantResponse:
         try:
