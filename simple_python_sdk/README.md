@@ -72,3 +72,185 @@ response = client.start_saga(
 print(response)
 ```
 
+
+
+
+┌───────────────────────────────────────────────────────────────────────┐
+│                        Saga Orchestrator SDK Flow                      │
+└───────────────────────────────────────────────────────────────────────┘
+
+  ┌─────────────┐       ┌─────────────────┐       ┌──────────────────┐
+  │             │       │                 │       │                  │
+  │  Client     ├───────▶  Orchestrator   ├───────▶  Participant    │
+  │  (Consumer) │       │  (Core SDK)     │       │  Services       │
+  │             │       │                 │       │                  │
+  └──────┬──────┘       └────────┬────────┘       └────────┬─────────┘
+         │                       │                         │
+         │                       │                         │
+         ▼                       ▼                         ▼
+
+┌───────────────────────────────────────────────────────────────────────┐
+│                             Step-by-Step Flow                         │
+└───────────────────────────────────────────────────────────────────────┘
+
+1. Client Initialization
+   • Developer creates SagaClient instance
+   • Configures orchestrator endpoint (host:port)
+
+2. Start Saga
+   ┌─────────────┐       ┌─────────────────┐
+   │ Client      │       │ Orchestrator    │
+   └──────┬──────┘       └────────┬────────┘
+          │ 1. StartSagaRequest   │
+          │───────────────────────▶
+          │                       │
+          │ 2. StartSagaResponse  │
+          │◄──────────────────────┤
+          │                       │
+          │ 3. Async Execution    │
+          │───────────────────────▶
+
+3. Step Execution
+   ┌─────────────────┐       ┌──────────────────┐
+   │ Orchestrator    │       │ Participant      │
+   └────────┬────────┘       │ Service          │
+            │ 4. ExecuteCmd   │
+            │────────────────▶
+            │                │
+            │ 5. CmdResponse │
+            │◄───────────────┤
+
+4. Compensation (if needed)
+   ┌─────────────────┐       ┌──────────────────┐
+   │ Orchestrator    │       │ Participant      │
+   └────────┬────────┘       │ Service          │
+            │ 6. Compensate  │
+            │────────────────▶
+            │                │
+            │ 7. CompResponse│
+            │◄───────────────┤
+
+5. Status Checking
+   ┌─────────────┐       ┌─────────────────┐
+   │ Client      │       │ Orchestrator    │
+   └──────┬──────┘       └────────┬────────┘
+          │ 8. StatusRequest      │
+          │───────────────────────▶
+          │                       │
+          │ 9. StatusResponse     │
+          │◄──────────────────────┤
+          │ (with all step        │
+          │  results/errors)      │
+
+┌───────────────────────────────────────────────────────────────────────┐
+│                      Detailed Component Interactions                   │
+└───────────────────────────────────────────────────────────────────────┘
+
+Client SDK Usage:
+1. Initialize client
+   client = SagaClient(orchestrator_host="localhost")
+
+2. Define saga steps
+   steps = [{
+     'service': 'inventory:50052',
+     'method': 'ReserveItem',
+     'compensation': 'ReleaseItem'
+   }]
+
+3. Start saga
+   saga = client.start_saga(
+     saga_id="order_123",
+     steps=steps,
+     payload={"items": [...]}
+   )
+
+4. Check status
+   status = client.get_saga_status("order_123")
+   print(status['steps'][0]['result'])  # Access result payload
+
+Participant Service Implementation:
+class InventoryService(SagaParticipantBase):
+    def execute(self, request):
+        if request.headers['method'] == 'ReserveItem':
+            # Business logic
+            return SagaResponse(
+                success=True,
+                result_payload=json.dumps({"reserved": [...]}).encode()
+            )
+
+    def compensate(self, request):
+        if request.headers['method'] == 'ReleaseItem':
+            # Rollback logic
+            return SagaResponse(success=True)
+
+Orchestrator Internals:
+• Maintains saga state
+• Executes steps sequentially
+• Triggers compensation on failure
+• Persists execution history
+• Provides status updates
+
+Error Handling Flow:
+1. Service fails → returns success=False
+2. Orchestrator:
+   - Marks step as failed
+   - Initiates compensation
+   - Executes reverse compensation flow
+   - Updates saga status (COMPENSATED/FAILED)
+
+Monitoring:
+• All steps include:
+  - Timestamps
+  - Execution status
+  - Result payloads
+  - Error messages
+
+
+  # 1. Import SDK
+from saga_sdk import SagaClient
+
+# 2. Initialize client
+client = SagaClient(host="orchestrator.prod")
+
+# 3. Define transaction
+steps = [
+    {
+        "service": "payments:50051",
+        "method": "ChargeCard",
+        "compensation": "RefundPayment",
+        "timeout": 10
+    }
+]
+
+# 4. Execute
+response = client.start_saga(
+    saga_id="txn_789",
+    steps=steps,
+    payload={"amount": 100, "currency": "USD"}
+)
+
+# 5. Monitor
+status = client.get_status("txn_789")
+
+
+from saga_sdk.service_base import SagaParticipantBase
+
+class PaymentService(SagaParticipantBase):
+    def execute(self, request):
+        # Implement business logic
+        return self.success_result(
+            transaction_id="txn_123",
+            status="processed"
+        )
+    
+    def compensate(self, request):
+        # Implement rollback
+        return self.success_result(
+            refund_id="ref_456"
+        )
+    
+    def success_result(self, **data):
+        return self.Response(
+            success=True,
+            result_payload=json.dumps(data).encode()
+        )

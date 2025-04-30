@@ -29,13 +29,14 @@ class ConnectionManager:
                     ],
                 )
                 # Verify connection is actually working
-                self._channel.channel_ready()
+                grpc.channel_ready_future(self._channel).result(timeout=self.timeout)
                 return
             except grpc.RpcError as e:
-                
                 last_error = e
                 retry_count += 1
-                asyncio.sleep(1 * retry_count) 
+                import time
+                time.sleep(1 * retry_count)
+
         raise ConnectionError(
             f"Failed to connect to {self.address} after {self.max_retries} attempts"
         ) from last_error

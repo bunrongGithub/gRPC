@@ -5,6 +5,9 @@ import saga_pb2
 import saga_pb2_grpc
 from google.protobuf.json_format import MessageToDict
 
+from core.connection.grpc_connection import GrpcConnection
+
+
 class GrpcOrchestratorClient:
     def __init__(self, orchestrator_host='localhost', orchestrator_port=50051):
         self.orchestrator_address = f"{orchestrator_host}:{orchestrator_port}"
@@ -22,9 +25,9 @@ class GrpcOrchestratorClient:
                     compensation_method=step['compensation_method'],
                     timeout_seconds=step.get('timeout_seconds', 5)
                 ))
-            with grpc.insecure_channel(self.orchestrator_address) as channel:
+            with GrpcConnection(self.orchestrator_address) as connect:
                 print("connect to base transaction on port - ",self.orchestrator_address)
-                stub = saga_pb2_grpc.SagaOrchestratorServiceStub(channel)
+                stub = connect.get_stub("SagaOrchestratorService",saga_pb2_grpc.SagaOrchestratorServiceStub)
                 response = stub.StartSaga(saga_pb2.StartSagaRequest(
                     saga_id=transaction_id,
                     steps=saga_steps,
@@ -36,12 +39,12 @@ class GrpcOrchestratorClient:
             print(f"Error starting saga: {e.code()}: {e.details()}")
             return None
 
-    def get_saga_status(self, saga_id: str) -> dict:
+    def get_transaction_status(self, transaction_id: str) -> dict:
         try:
-            with grpc.insecure_channel(self.orchestrator_address) as channel:
-                stub = saga_pb2_grpc.SagaOrchestratorServiceStub(channel)
+            with GrpcConnection(grpc_server_add=self.orchestrator_address) as connect:
+                stub = connect.get_stub("SagaOrchestratorService",saga_pb2_grpc.SagaOrchestratorServiceStub)
                 response = stub.GetSagaStatus(
-                    saga_pb2.GetSagaStatusRequest(saga_id=saga_id)
+                    saga_pb2.GetSagaStatusRequest(saga_id=transaction_id)
                 )
                 
                 response_dict = MessageToDict(response)
@@ -79,6 +82,6 @@ if __name__ == '__main__':
         steps=steps,
     )
     print("Response:", response)
-    status = client.get_saga_status(saga_id="order_123")
+    status = client.get_transaction_status(transaction_id="order_123")
     
     print("Receive status:: ", status)
