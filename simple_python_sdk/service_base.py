@@ -25,6 +25,7 @@ class GrpcSagaTransactionParticipantBase(saga_pb2_grpc.SagaParticipantServicer):
     def compensate(self,request,context) -> saga_pb2.SagaParticipantResponse:
         raise NotImplementedError
 
+
 def run_participant_server(service: GrpcSagaTransactionParticipantBase, port: int = 50051):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     saga_pb2_grpc.add_SagaParticipantServicer_to_server(service, server)
