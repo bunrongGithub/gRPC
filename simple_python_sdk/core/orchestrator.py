@@ -113,6 +113,7 @@ class SagaOrchestrator(saga_pb2_grpc.SagaOrchestratorServiceServicer):
                 service_name=step.service_name,
                 method_name=step.rpc_method,
                 success=response.success,
+                result_payload=response.result_payload,
                 error_message=response.error_message
             )
             

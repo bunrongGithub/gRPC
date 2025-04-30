@@ -1,6 +1,6 @@
-from simple_python_sdk.core.api import GrpcSDKConnection
+from simple_python_sdk.core.api import GrpcConnection
 def main():
     # Example Connection
-    GrpcSDKConnection(grpc_server_add="localhost:50052")
+    GrpcConnection(grpc_server_add="localhost:50052")
 if __name__ == "__main__":
     main()

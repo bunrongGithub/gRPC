@@ -1,9 +1,9 @@
 
 from typing import Any
-from simple_python_sdk.core.connection.manager import ConnectionManager
+from core.connection.manager import ConnectionManager
 
 
-class GrpcSDKConnection:
+class GrpcConnection:
     def __init__(self, grpc_server_add: str):
         self.conn_manager = ConnectionManager(grpc_server_add)
     def __enter__(self):
@@ -12,3 +12,5 @@ class GrpcSDKConnection:
         
     def __exit__(self,**kwargs):
         self.conn_manager.close()
+    def get_stub(self,service_name: str,stub_class):
+        return self.conn_manager.get_stub(service_name,stub_class)

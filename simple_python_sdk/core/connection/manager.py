@@ -21,7 +21,7 @@ class ConnectionManager:
         last_error = None
         while retry_count < self.max_retries:
             try:
-                self._channel = grpc.aio.insecure_channel(
+                self._channel = grpc.insecure_channel(
                     target=self.address,
                     options=[
                         ("grpc.keepalive_time_ms", 10000),
@@ -32,9 +32,10 @@ class ConnectionManager:
                 self._channel.channel_ready()
                 return
             except grpc.RpcError as e:
+                
                 last_error = e
                 retry_count += 1
-                asyncio.sleep(1 * retry_count)  # Exponential backoff
+                asyncio.sleep(1 * retry_count) 
         raise ConnectionError(
             f"Failed to connect to {self.address} after {self.max_retries} attempts"
         ) from last_error
