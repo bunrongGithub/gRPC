@@ -26,7 +26,7 @@ class GrpcOrchestratorClient:
                 ))
             with GrpcConnection(self.orchestrator_address) as connect:
                 stub = connect.get_stub("SagaOrchestratorService",saga_pb2_grpc.SagaOrchestratorServiceStub)
-                response = stub.StartSaga(saga_pb2.StartSagaRequest(
+                response = stub.StartSagaTransaction(saga_pb2.StartSagaRequest(
                     saga_id=transaction_id,
                     steps=saga_steps,
                     payload=str(payload).encode()
@@ -40,7 +40,7 @@ class GrpcOrchestratorClient:
         try:
             with GrpcConnection(grpc_server_add=self.orchestrator_address) as connect:
                 stub = connect.get_stub("SagaOrchestratorService",saga_pb2_grpc.SagaOrchestratorServiceStub)
-                response = stub.GetSagaStatus(
+                response = stub.GetSagaStatusTransaction(
                     saga_pb2.GetSagaStatusRequest(saga_id=transaction_id)
                 )
                 
@@ -61,7 +61,6 @@ class GrpcOrchestratorClient:
 if __name__ == '__main__':
     client = GrpcOrchestratorClient()
     steps = [
-       
         {
             'port': 50053,
             'rpc_method': 'RefundPayment',

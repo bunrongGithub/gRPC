@@ -34,13 +34,13 @@ class SagaOrchestratorServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.StartSaga = channel.unary_unary(
-                '/saga.v1.SagaOrchestratorService/StartSaga',
+        self.StartSagaTransaction = channel.unary_unary(
+                '/saga.v1.SagaOrchestratorService/StartSagaTransaction',
                 request_serializer=saga__pb2.StartSagaRequest.SerializeToString,
                 response_deserializer=saga__pb2.StartSagaResponse.FromString,
                 _registered_method=True)
-        self.GetSagaStatus = channel.unary_unary(
-                '/saga.v1.SagaOrchestratorService/GetSagaStatus',
+        self.GetSagaStatusTransaction = channel.unary_unary(
+                '/saga.v1.SagaOrchestratorService/GetSagaStatusTransaction',
                 request_serializer=saga__pb2.GetSagaStatusRequest.SerializeToString,
                 response_deserializer=saga__pb2.GetSagaStatusResponse.FromString,
                 _registered_method=True)
@@ -49,13 +49,13 @@ class SagaOrchestratorServiceStub(object):
 class SagaOrchestratorServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def StartSaga(self, request, context):
+    def StartSagaTransaction(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetSagaStatus(self, request, context):
+    def GetSagaStatusTransaction(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -64,13 +64,13 @@ class SagaOrchestratorServiceServicer(object):
 
 def add_SagaOrchestratorServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'StartSaga': grpc.unary_unary_rpc_method_handler(
-                    servicer.StartSaga,
+            'StartSagaTransaction': grpc.unary_unary_rpc_method_handler(
+                    servicer.StartSagaTransaction,
                     request_deserializer=saga__pb2.StartSagaRequest.FromString,
                     response_serializer=saga__pb2.StartSagaResponse.SerializeToString,
             ),
-            'GetSagaStatus': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetSagaStatus,
+            'GetSagaStatusTransaction': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetSagaStatusTransaction,
                     request_deserializer=saga__pb2.GetSagaStatusRequest.FromString,
                     response_serializer=saga__pb2.GetSagaStatusResponse.SerializeToString,
             ),
@@ -86,7 +86,7 @@ class SagaOrchestratorService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def StartSaga(request,
+    def StartSagaTransaction(request,
             target,
             options=(),
             channel_credentials=None,
@@ -99,7 +99,7 @@ class SagaOrchestratorService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/saga.v1.SagaOrchestratorService/StartSaga',
+            '/saga.v1.SagaOrchestratorService/StartSagaTransaction',
             saga__pb2.StartSagaRequest.SerializeToString,
             saga__pb2.StartSagaResponse.FromString,
             options,
@@ -113,7 +113,7 @@ class SagaOrchestratorService(object):
             _registered_method=True)
 
     @staticmethod
-    def GetSagaStatus(request,
+    def GetSagaStatusTransaction(request,
             target,
             options=(),
             channel_credentials=None,
@@ -126,7 +126,7 @@ class SagaOrchestratorService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/saga.v1.SagaOrchestratorService/GetSagaStatus',
+            '/saga.v1.SagaOrchestratorService/GetSagaStatusTransaction',
             saga__pb2.GetSagaStatusRequest.SerializeToString,
             saga__pb2.GetSagaStatusResponse.FromString,
             options,

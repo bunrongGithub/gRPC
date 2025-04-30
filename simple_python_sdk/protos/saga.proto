@@ -5,8 +5,8 @@ package saga.v1;
 import "google/protobuf/timestamp.proto";
 
 service SagaOrchestratorService {
-  rpc StartSaga (StartSagaRequest) returns (StartSagaResponse);
-  rpc GetSagaStatus (GetSagaStatusRequest) returns (GetSagaStatusResponse);
+  rpc StartSagaTransaction (StartSagaRequest) returns (StartSagaResponse);
+  rpc GetSagaStatusTransaction (GetSagaStatusRequest) returns (GetSagaStatusResponse);
 }
 
 service SagaParticipant {

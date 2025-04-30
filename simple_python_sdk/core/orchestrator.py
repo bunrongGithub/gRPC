@@ -18,7 +18,7 @@ class GrpcOrchestratorTransaction(saga_pb2_grpc.SagaOrchestratorServiceServicer)
         self.channel_pool: Dict[str, grpc.Channel] = {}
         self.logger = logging.getLogger(__name__)
         
-    def StartSaga(self, request: saga_pb2.StartSagaRequest, context):
+    def StartSagaTransaction(self, request: saga_pb2.StartSagaRequest, context):
         saga = SagaInstance(
             saga_id=request.saga_id,
             steps=list(request.steps),
@@ -38,7 +38,7 @@ class GrpcOrchestratorTransaction(saga_pb2_grpc.SagaOrchestratorServiceServicer)
             status=saga.status
         )
     
-    def GetSagaStatus(self, request: saga_pb2.GetSagaStatusRequest, context):
+    def GetSagaStatusTransaction(self, request: saga_pb2.GetSagaStatusRequest, context):
         saga = self.storage.get_saga(request.saga_id)
         
         if not saga:
