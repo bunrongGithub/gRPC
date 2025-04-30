@@ -11,7 +11,6 @@ import saga_pb2, saga_pb2_grpc
 class ExampleService(saga_pb2_grpc.SagaParticipantServicer):
     def Execute(self, request, context):
         method = request.headers.get("step-method")
-        print("Calling method:: ", method)
         self.logger = logging.getLogger(__name__)
 
         try:

@@ -53,6 +53,7 @@ message StepExecution {
   bool success = 4;
   string error_message = 5;
   google.protobuf.Timestamp executed_at = 6;
+  bytes result_payload = 7;
 }
 
 message SagaParticipantRequest {

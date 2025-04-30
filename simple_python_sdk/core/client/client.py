@@ -1,3 +1,4 @@
+import base64
 import json
 import grpc
 import saga_pb2
@@ -43,18 +44,16 @@ class GrpcOrchestratorClient:
                     saga_pb2.GetSagaStatusRequest(saga_id=saga_id)
                 )
                 
-                # Convert protobuf to dict
                 response_dict = MessageToDict(response)
-                
-                # Decode result payloads if they exist
+
                 if 'steps' in response_dict:
                     for step in response_dict['steps']:
                         if 'resultPayload' in step:
                             try:
-                                step['result'] = json.loads(step['resultPayload'].decode('utf-8'))
-                            except:
-                                step['result'] = step['resultPayload']
-                
+                                raw = base64.b64decode(step['resultPayload'])
+                                step['resultPayload'] = json.loads(raw.decode('utf-8'))
+                            except Exception as e:
+                                raise e
                 return response_dict
         except grpc.RpcError as e:
             print(f"Error getting status: {e.code()}: {e.details()}")
@@ -80,3 +79,6 @@ if __name__ == '__main__':
         steps=steps,
     )
     print("Response:", response)
+    status = client.get_saga_status(saga_id="order_123")
+    
+    print("Receive status:: ", status)

@@ -29,7 +29,7 @@ class InMemoryStorage(SagaInstance):
             service_name=step_execution.get('service_name', ''),
             method_name=step_execution.get('method_name', ''),
             success=step_execution.get('success', False),
-            # result_payload=step_execution.get('result_payload', b''),
+            result_payload=step_execution.get('result_payload', b''),
             error_message=step_execution.get('error_message', ''),
             executed_at=step_execution.get('executed_at')
         )
